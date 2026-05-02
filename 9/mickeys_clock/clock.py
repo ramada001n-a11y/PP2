@@ -24,22 +24,14 @@ class Mik:
         min, sec = self.get_angles()
 
 
-        self.rotate_around_base(surface, self.min_hand, min)
-        self.rotate_around_base(surface, self.sec_hand, sec)
+        self.rotate_around(surface, self.min_hand, min)
+        self.rotate_around(surface, self.sec_hand, sec)
         
      
 
-    def rotate_around_base(self, surface, image, angle):
-        """
-        Вращает изображение вокруг его основания (нижней части), а не центра.
-        Предполагается, что на исходной картинке рука "смотрит" ровно вверх.
-        """
-        # Смещение от центра картинки до точки крепления (основание стрелки).
-        # Если стрелка смотрит вверх, её основание находится в самом низу по центру: (0, height / 2)
-        offset = pygame.math.Vector2(0, image.get_height() / 2)
-        
-        
-        rotated_offset = offset.rotate(angle)
+    def rotate_around(self, surface, image, angle):
+        offset = pygame.math.Vector2(0, image.get_height() / 2)    
+        rotated_offset = offset.rotate(-angle)
         
         
         rotated_image = pygame.transform.rotate(image, angle)
@@ -48,5 +40,4 @@ class Mik:
         rect_center = (self.center[0] - rotated_offset.x, self.center[1] - rotated_offset.y)
         new_rect = rotated_image.get_rect(center=rect_center)
         
-        # Отрисовка
         surface.blit(rotated_image, new_rect)
